@@ -1,0 +1,3 @@
+[submodule "parrot"]
+	path = parrot
+	url = git@github.com:cmsozio/parrot.git
