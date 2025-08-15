@@ -24,7 +24,7 @@ SOFTWARE.
 
 use std::env;
 use std::process;
-use parrot::*;
+use parrot;
 
 fn main() {
 
@@ -42,15 +42,17 @@ fn main() {
 
     let file = &args[1];
 
+    let mut parser = parrot::VerilogParser::new(file);
+    parser.parse();
+
     if output == "dot" {
         let verbosity: u8 = 0;
         let include_sum: bool = true;
-        let mut netlist_graph = parrot::NetlistGraph::new(file, verbosity, include_sum);
+        let mut netlist_graph = parrot::NetlistGraph::new(parser, verbosity, include_sum);
         netlist_graph.setup();
+        netlist_graph.write_dot();
     } else if output == "json" {
-        let mut vf = parrot::VerilogParser::new(file);
-        vf.parse();
-        vf.top_module_jsonify();
+        parser.top_module_jsonify();
     } else {
         eprintln!("\nUnsupported output format: {}\n", output);
         process::exit(1);
