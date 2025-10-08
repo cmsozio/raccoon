@@ -3,5 +3,13 @@ name = "raccoon"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+name = "raccoon"
+crate-type = ["cdylib"]
+
 [dependencies]
 parrot = { path = "parrot" }
+json = "0.12.4"
+pyo3 = { version = "0.25.1", features = ["extension-module"] }
+petgraph = "0.8.2"
+petgraph-graphml = "5.0.0"

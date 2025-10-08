@@ -1,0 +1,8 @@
+maturin
+networkx
+pydot
+matplotlib
+argparse
+scikit-learn
+jupyterlab
+igraph

@@ -1,4 +1,8 @@
 /target
+/designs
+/out
 *.json
 *.dot
 *.v
+*.log
+*.gml

@@ -1,3 +1,6 @@
 [submodule "parrot"]
 	path = parrot
 	url = git@github.com:cmsozio/parrot.git
+[submodule "plugins/cotd"]
+	path = plugins/cotd
+	url = git@github.com:cmsozio/cotd.git

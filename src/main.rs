@@ -25,11 +25,18 @@ SOFTWARE.
 use std::env;
 use std::process;
 use parrot;
+use petgraph::{dot::Dot, graph::NodeIndex, Graph};
+use pyo3::prelude::*;
+
+use crate::graph_analysis::GraphAnalysis;
+
+mod graph_analysis;
+
 
 fn main() {
 
     // Default output format is DOT
-    let mut output = "dot";
+    let mut option = "dot";
 
     let args= env::args();
     let args: Vec<String> = args.collect();
@@ -37,25 +44,36 @@ fn main() {
         eprintln!("\nNeed to provide gate-level netlist.\n");
         process::exit(1);
     } else if args.len() == 3 {
-        output = &args[2];
+        option = &args[2];
     }
 
     let file = &args[1];
 
     let mut parser = parrot::VerilogParser::new(file);
     parser.parse();
+    
+    let verbosity: u8 = 0;
+    let include_sum: bool = true;
+    let mut netlist_graph = parrot::NetlistGraph::new(parser, verbosity, include_sum);
+    netlist_graph.setup();
 
-    if output == "dot" {
-        let verbosity: u8 = 0;
-        let include_sum: bool = true;
-        let mut netlist_graph = parrot::NetlistGraph::new(parser, verbosity, include_sum);
-        netlist_graph.setup();
+    if option == "dot" {
         netlist_graph.write_dot();
-    } else if output == "json" {
-        parser.top_module_jsonify();
+    } else if option == "json" {
+        netlist_graph.vp.top_module_jsonify();
+    } else if option == "analyze" {
+        let mut ga = GraphAnalysis::new(netlist_graph.netgraph);
+        ga.setup_node_map();
+        let list = ga.user_get_neighbors("g193333");
+        println!("\nNeighbors of 'g193333': {:?}", list);
+        let list = ga.user_logic_cone("g193333", 1, "in");
+        println!("\nLogic cone of 'g193333': {:?}", list);
+        //ga.print_node_map();
+        //ga.analyze();
     } else {
-        eprintln!("\nUnsupported output format: {}\n", output);
+        eprintln!("\nUnsupported option format: {}\n", option);
         process::exit(1);
     }
+
 
 }
