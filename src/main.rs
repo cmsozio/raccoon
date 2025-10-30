@@ -26,7 +26,6 @@ use std::env;
 use std::process;
 use parrot;
 use petgraph::{dot::Dot, graph::NodeIndex, Graph};
-use pyo3::prelude::*;
 
 use crate::graph_analysis::GraphAnalysis;
 
@@ -59,6 +58,8 @@ fn main() {
 
     if option == "dot" {
         netlist_graph.write_dot();
+    } else if option == "gml" {
+        netlist_graph.write_gml();
     } else if option == "json" {
         netlist_graph.vp.top_module_jsonify();
     } else if option == "analyze" {
