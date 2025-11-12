@@ -87,14 +87,11 @@ if __name__ == "__main__":
             #for pair in cotd.combinational:
             #    print("{}: {}".format(pair, cotd.combinational[pair]))
             
-            """
-            high = 0
-            for p in cotd.point_list:
-                print("{}".format(p))
-                if p[0] > high:
-                    high = p[0]
-            print("{}".format(high))
+        else:
+            if args.graph:
+                cotd = COTDGML(graph_file=args.graph, cell_list_file="cells.json")
+                cotd.cc()
+                cotd.co()
+                kmeans = cotd.k_means_algo()
 
-            for c in cotd.combinational.items():
-                print(c)
-            """
+                cotd.draw_scatter(kmeans, "Test")
